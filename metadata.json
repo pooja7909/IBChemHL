@@ -1,0 +1,6 @@
+{
+  "name": "AtomicTutor: IB Chemistry HL Mastery",
+  "description": "An interactive AI tutor for IBDP Chemistry HL, featuring a weekly study roadmap for May exams, practice worksheets with AI marking, a digital whiteboard, and concept-based chatbot support for Structure 1-3 and Reactivity 1.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["AI-powered chemistry marking", "Interactive study roadmap", "Science-focused digital whiteboard"]
+}
