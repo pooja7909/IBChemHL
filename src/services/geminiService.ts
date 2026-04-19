@@ -1,6 +1,17 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+let aiInstance: GoogleGenAI | null = null;
+
+function getAI() {
+  if (!aiInstance) {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      throw new Error("GEMINI_API_KEY is missing. Please add it to your environment variables.");
+    }
+    aiInstance = new GoogleGenAI({ apiKey });
+  }
+  return aiInstance;
+}
 
 export const CHEMISTRY_SYSTEM_PROMPT = `You are AtomicTutor, a world-class IBDP Chemistry HL Personal Tutor. 
 Your specific mission is to prepare the student for a Grade 7 in the May exams by mastering the syllabus and perfect "Exam Technique".
@@ -30,6 +41,7 @@ Tone:
 
 export async function askTutor(message: string, history: { role: 'user' | 'model', text: string }[] = []) {
   try {
+    const ai = getAI();
     const response = await ai.models.generateContent({
       model: "gemini-3.1-pro-preview",
       contents: [
@@ -44,6 +56,9 @@ export async function askTutor(message: string, history: { role: 'user' | 'model
     return response.text;
   } catch (error) {
     console.error("Gemini Error:", error);
+    if (error instanceof Error && error.message.includes("GEMINI_API_KEY")) {
+      return "Tutor configuration error: Missing API Key. Check your environment variables.";
+    }
     return "The alchemy bench is currently busy. Please try again in a moment.";
   }
 }
@@ -53,6 +68,7 @@ export async function generateQuestion(topicCode: string) {
   Ensure it is different from common textbook examples. Change chemical species, data values, or context each time to provide unlimited practice variants.`;
 
   try {
+    const ai = getAI();
     const response = await ai.models.generateContent({
       model: "gemini-3.1-pro-preview",
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
@@ -84,6 +100,7 @@ Question: "${question}"
 Student's Answer: "${studentAnswer}"`;
 
   try {
+    const ai = getAI();
     const response = await ai.models.generateContent({
       model: "gemini-3.1-pro-preview",
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
