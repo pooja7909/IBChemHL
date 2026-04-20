@@ -75,8 +75,8 @@ export default function App() {
            <div className="flex items-center gap-3 p-3 bg-zinc-900/30 rounded-xl border border-zinc-800/50">
               <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center shrink-0 font-bold text-xs ring-2 ring-indigo-500/20">PH</div>
               <div className="hidden md:block flex-1 min-w-0">
-                <p className="text-xs font-bold truncate">Pooja A.</p>
-                <p className="text-[10px] text-zinc-500 truncate">Candidate #2025</p>
+                <p className="text-xs font-bold truncate">IBDP Chem HL</p>
+                <p className="text-[10px] text-zinc-500 truncate">Candidate Exam in May 2027</p>
               </div>
            </div>
            <button className="w-full flex items-center gap-4 px-4 py-2 text-zinc-500 hover:text-red-400 transition-colors uppercase tracking-widest text-[10px] font-bold">
