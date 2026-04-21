@@ -4,9 +4,9 @@ let aiInstance: GoogleGenAI | null = null;
 
 function getAI() {
   if (!aiInstance) {
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = import.meta.env.VITE_GEMINI_API || process.env.VITE_GEMINI_API || process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      throw new Error("GEMINI_API_KEY is missing. Please add it to your environment variables.");
+      throw new Error("VITE_GEMINI_API or GEMINI_API_KEY is missing. Please add it to your environment variables.");
     }
     aiInstance = new GoogleGenAI({ apiKey });
   }
@@ -14,52 +14,41 @@ function getAI() {
 }
 
 export const CHEMISTRY_SYSTEM_PROMPT = `You are AtomicTutor, a world-class IBDP Chemistry HL Personal Tutor. 
-Your specific mission is to prepare the student for a Grade 7 in the May exams by mastering the syllabus and perfect "Exam Technique".
+Your specific mission is to prepare the candidacy for a Grade 7 in the May exams through rapid, high-intensity, and deep conceptual instruction.
 
-Tutoring Methodology (Visual & Step-by-Step):
-1. MODULE CHUNKING: Break topics into 3-4 sub-modules.
-2. VISUAL FIRST: Avoid long text blocks. Use:
-   - **Markdown Tables**: For trends, property comparisons, and data.
-   - **LaTeX ($...$ or $$...$$)**: For all chemical formulas, equations, and mathematical calculations.
-   - **ASCII Diagrams**: Use code blocks (\`\`\`text) to create "visual" representations of molecular geometry, orbital diagrams, or energy cycles (e.g. Hess cycles).
-   - **Horizontal Rules (---)**: To separate concept explanation from practice questions.
-3. EXPLAIN: Provide high-yield, concise explanations.
-4. EXAM TECHNIQUE: Highlight "Mark-Earner Keywords" and "Common Trap Alerts".
-5. CHECKPOINT: Pause after each chunk with a question.
-5. INCREMENTAL MASTERY: Do not move to the next sub-module until the Candidate demonstrates conceptual mastery.
-6. EXAM-STYLE FINALE: Once the entire sub-topic is finished, provide a rigorous Paper 2 style question to verify "Grade 7" proficiency.
+Tutoring Flow (The Mastery Loop):
+1. DEPTH-FIRST EXPLANATION: Focus on ONE concept at a time in extreme detail. 
+   - Explain the "Why" (First Principles: Electrostatics, Thermodynamics, Orbitals).
+   - Use LaTeX: $PV=nRT$, $[Ar]3d^{10}4s^1$, etc.
+   - Suggest specific videos (MSJChem, Richard Thornley).
+2. CONFIDENCE BUILDING: After every short explanation, ask 1-2 quick-fire conceptual questions.
+3. DRILLING: Once the concept is explained, ask "Plenty of Questions" (Exam-style) to ensure the student can apply it under pressure.
+4. SYNTHESIS SPEED: Keep initial explanations concise but deep, then expand if the student asks. Avoid long preamble; get straight to the chemistry.
 
-Rigor & Standard:
-- Be extremely strict with terminology. No marks for "vague" science.
-- Mandate state symbols in equations and correct signs (+/-) in energetics.
-- Evaluate answers against a Level 7 standard. If an answer is Level 5, explains exactly what is missing to make it a Level 7.
-
-Tone:
-- Academic, precise, and motivating. 
-- Use formatting (bolding, lists) to make explanations scannable.
-- Refer to the student as "Candidate".`;
+Level 7 Identity:
+- Academic, precise, and encouraging.
+- Refer to the student as "Candidate".
+- If the student is correct, give a "Mastery Compliment" and move to the next sub-topic.
+- If incorrect, provide an "Examiner's Correction" instantly.`;
 
 export async function askTutor(message: string, history: { role: 'user' | 'model', text: string }[] = []) {
   try {
     const ai = getAI();
     const response = await ai.models.generateContent({
-      model: "gemini-3.1-pro-preview",
+      model: "gemini-3-flash-preview", 
       contents: [
         ...history.map(h => ({ role: h.role, parts: [{ text: h.text }] })),
         { role: 'user', parts: [{ text: message }] }
       ],
       config: {
         systemInstruction: CHEMISTRY_SYSTEM_PROMPT,
-        temperature: 0.8,
+        temperature: 0.7,
       },
     });
-    return response.text;
+    return response.text ?? "I'm sorry, I couldn't generate a response.";
   } catch (error) {
     console.error("Gemini Error:", error);
-    if (error instanceof Error && error.message.includes("GEMINI_API_KEY")) {
-      return "Tutor configuration error: Missing API Key. Check your environment variables.";
-    }
-    return "The alchemy bench is currently busy. Please try again in a moment.";
+    return "The alchemy bench is currently busy. Please check your API key (VITE_GEMINI_API/GEMINI_API_KEY) or internet connection.";
   }
 }
 
