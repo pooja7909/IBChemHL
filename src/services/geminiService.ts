@@ -4,43 +4,36 @@ let aiInstance: GoogleGenAI | null = null;
 
 function getAI() {
   if (!aiInstance) {
-    // According to framework rules, use process.env.GEMINI_API_KEY for Gemini API
-    // Falling back to VITE_... only if explicitly defined by user in .env
+    // The platform handles mapping GEMINI_API_KEY to process.env in the SDK initialization
     const apiKey = process.env.GEMINI_API_KEY || (import.meta as any).env.VITE_GEMINI_API;
     
     if (!apiKey) {
-      throw new Error("GEMINI_API_KEY is missing. Please set it in your environment/settings.");
+      throw new Error("GEMINI_API_KEY is missing. Please add it to your platform settings.");
     }
     aiInstance = new GoogleGenAI({ apiKey });
   }
   return aiInstance;
 }
 
-export const CHEMISTRY_SYSTEM_PROMPT = `You are AtomicTutor, a world-class IBDP Chemistry HL Personal Tutor. 
-Your specific mission is to prepare the candidacy for a Grade 7 in the May exams through rapid, ultra-concise, and high-impact instruction.
+export const CHEMISTRY_SYSTEM_PROMPT = `You are AtomicTutor, an elite IBDP Chemistry HL Personal Tutor.
+Your goal: Prepare the Candidate for a Grade 7 in May.
 
-STYLE GUIDELINES (MANDATORY):
-1. NO LONG TEXT: Students hate long paragraphs. Use SHORT, STRAIGHTFORWARD sentences.
-2. BULLET POINTS ONLY: Break down complex ideas into simple, high-yield bullet points.
-3. HIGHLIGHT KEY TERMS: **Bold** critical examiner keywords. 
-4. CHEAT SHEET STYLE: Every response should look like a summary for quick revision.
-5. EXAM SECRETS: Only tell them exactly what they need to know for the exam.
-
-Tutoring Flow:
-- Explain 1 concept using max 4-5 bullet points.
-- Include a specific LaTeX formula: $E=mc^2$.
-- Ask 1 quick confidence-check question immediately.
-- If they get it, move on fast.
+PEDAGOGICAL RULES (MANDATORY):
+1. **ULTRA-CONCISE**: Max 150 words per response. No long paragraphs.
+2. **HIGH-VELOCITY**: Give immediate, straightforward answers.
+3. **EXAM-FOCUSED**: Highlight **Grade 7 Keywords** (e.g., electrostatic attraction, spontaneity, entropy).
+4. **MASTER PLAN STYLE**: Use Bullet points for everything.
+5. **CONFIDENCE**: After 4 bullets of explanation, ask 1 sharp question.
 
 Level 7 Identity:
-- Academic, precise, but EXTREMELY direct.
-- Refer to the student as "Candidate".`;
+- Direct, academic, and efficient.
+- Address the user as "Candidate".`;
 
 export async function askTutor(message: string, history: { role: 'user' | 'model', text: string }[] = []) {
   try {
     const ai = getAI();
     const response = await ai.models.generateContent({
-      model: "gemini-flash-latest", 
+      model: "gemini-3-flash-preview", 
       contents: [
         ...history.map(h => ({ role: h.role, parts: [{ text: h.text }] })),
         { role: 'user', parts: [{ text: message }] }
@@ -51,23 +44,25 @@ export async function askTutor(message: string, history: { role: 'user' | 'model
       },
     });
     return response.text ?? "I'm sorry, I couldn't generate a response.";
-  } catch (error) {
+  } catch (error: any) {
     console.error("Gemini Error:", error);
-    return "The alchemy bench is currently busy. Please ensure your GEMINI_API_KEY is valid and your connection is stable.";
+    // Surface the actual error message if possible to help the user debug
+    const errorMsg = error?.message || "Unknown Error";
+    return `The alchemy bench is currently busy.\n\n**Diagnostic Info:** ${errorMsg}\n\n*Please ensure your GEMINI_API_KEY is correctly set in the environment settings.*`;
   }
 }
 
 export async function generateQuestion(topicCode: string) {
   const prompt = `Generate a unique, challenging IB Chemistry HL Paper 2 style exam question for: ${topicCode}. 
-  Ensure it is different from common textbook examples. Change chemical species, data values, or context each time to provide unlimited practice variants.`;
+  Ensure it is different from common textbook examples. Change chemical species, data values, or context each time.`;
 
   try {
     const ai = getAI();
     const response = await ai.models.generateContent({
-      model: "gemini-flash-latest",
+      model: "gemini-3-flash-preview",
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       config: {
-        systemInstruction: CHEMISTRY_SYSTEM_PROMPT + "\n\nRefer to core themes: Particles in electric fields, Hess cycles, VSEPR shapes, Periodic trends.",
+        systemInstruction: CHEMISTRY_SYSTEM_PROMPT + "\n\nOutput strictly as JSON.",
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
@@ -96,10 +91,10 @@ Student's Answer: "${studentAnswer}"`;
   try {
     const ai = getAI();
     const response = await ai.models.generateContent({
-      model: "gemini-flash-latest",
+      model: "gemini-3-flash-preview",
       contents: [{ role: 'user', parts: [{ text: prompt }] }],
       config: {
-        systemInstruction: CHEMISTRY_SYSTEM_PROMPT,
+        systemInstruction: CHEMISTRY_SYSTEM_PROMPT + "\n\nEvaluate and return JSON.",
         responseMimeType: "application/json",
         responseSchema: {
           type: Type.OBJECT,
