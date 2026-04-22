@@ -16,15 +16,15 @@ interface PracticeAreaProps {
 
 export default function PracticeArea({ initialTopicId }: PracticeAreaProps) {
   const [activeTab, setActiveTab] = useState<'questions' | 'results'>('questions');
-  const [selectedTopic, setSelectedTopic] = useState('mixed');
-  const [paperStyle, setPaperStyle] = useState<'Paper 1' | 'Paper 2'>('Paper 2');
-  const [currentQuestion, setCurrentQuestion] = useState<any>({
-    topic: "Structure 1.2",
-    question: "A beam of particles consisting of protons, neutrons, and electrons is passed through an electric field between a positive and negative electrode. Identify which particle follows path X (deflected towards the positive electrode) and why.",
-    marks: 2,
-    difficulty: "Medium",
-    type: 'Paper 2'
+  const [selectedTopic, setSelectedTopic] = useState(() => {
+    if (initialTopicId) {
+      const topic = IB_CURRICULUM.find(t => t.id === initialTopicId);
+      return topic ? topic.code : 'mixed';
+    }
+    return 'mixed';
   });
+  const [paperStyle, setPaperStyle] = useState<'Paper 1' | 'Paper 2'>('Paper 2');
+  const [currentQuestion, setCurrentQuestion] = useState<any>(null);
   const [answer, setAnswer] = useState('');
   const [isMarking, setIsMarking] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -36,9 +36,12 @@ export default function PracticeArea({ initialTopicId }: PracticeAreaProps) {
       const topic = IB_CURRICULUM.find(t => t.id === initialTopicId);
       if (topic) {
         hasLoadedInitial.current = true;
-        setSelectedTopic(topic.code);
         handleGenerate(topic.code);
       }
+    } else if (!initialTopicId && !hasLoadedInitial.current && !currentQuestion) {
+      // Load a random or first topic question if no initial ID
+      hasLoadedInitial.current = true;
+      handleGenerate('mixed');
     }
   }, [initialTopicId]);
 
@@ -162,7 +165,12 @@ export default function PracticeArea({ initialTopicId }: PracticeAreaProps) {
       </div>
 
       <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-zinc-50/20">
-        {activeTab === 'questions' ? (
+        {!currentQuestion && !isGenerating ? (
+          <div className="flex flex-col items-center justify-center py-20 space-y-4">
+            <Loader2 className="w-8 h-8 text-emerald-600 animate-spin" />
+            <p className="text-xs text-zinc-400 uppercase tracking-[0.2em] font-black">Initializing Simulator...</p>
+          </div>
+        ) : activeTab === 'questions' ? (
           <div className="space-y-6">
             {isGenerating ? (
               <div className="flex flex-col items-center justify-center py-20 space-y-4">
