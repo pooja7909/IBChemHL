@@ -175,7 +175,7 @@ export default function PracticeArea({ initialTopicId }: PracticeAreaProps) {
             {isGenerating ? (
               <div className="flex flex-col items-center justify-center py-20 space-y-4">
                 <Loader2 className="w-8 h-8 text-emerald-600 animate-spin" />
-                <p className="text-xs text-zinc-400 uppercase tracking-[0.2em] font-black animate-pulse">De-coding Syllabus...</p>
+                <p className="text-xs text-zinc-600 uppercase tracking-[0.2em] font-black animate-pulse">De-coding Syllabus...</p>
               </div>
             ) : (
               <>
@@ -183,10 +183,10 @@ export default function PracticeArea({ initialTopicId }: PracticeAreaProps) {
                   <div className="absolute top-0 right-0 p-2 opacity-5 group-hover:opacity-10 transition-opacity">
                     <Atom className="w-12 h-12 text-emerald-600" />
                   </div>
-                  <span className="text-[10px] uppercase tracking-widest text-emerald-600 font-black mb-3 block">
+                  <span className="text-[10px] uppercase tracking-widest text-emerald-700 font-bold mb-3 block">
                     {currentQuestion.topic} • {currentQuestion.marks} Marks • {currentQuestion.type || 'HL'}
                   </span>
-                  <div className="prose prose-sm max-w-none text-lg leading-relaxed text-zinc-800 font-medium">
+                  <div className="prose prose-sm max-w-none text-lg leading-relaxed text-zinc-900 font-bold">
                     <ReactMarkdown remarkPlugins={[remarkMath]} rehypePlugins={[rehypeKatex]}>
                       {currentQuestion.question}
                     </ReactMarkdown>
@@ -205,10 +205,10 @@ export default function PracticeArea({ initialTopicId }: PracticeAreaProps) {
                           isMarking && "opacity-50"
                         )}
                       >
-                        <span className="w-6 h-6 rounded bg-zinc-50 border border-zinc-200 flex items-center justify-center mr-3 shrink-0 text-[10px] font-bold text-zinc-400 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-emerald-500 transition-colors">
+                        <span className="w-6 h-6 rounded bg-zinc-100 border border-zinc-300 flex items-center justify-center mr-3 shrink-0 text-[10px] font-black text-zinc-700 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-emerald-500 transition-colors">
                           {String.fromCharCode(65 + idx)}
                         </span>
-                        <span className="text-zinc-600 group-hover:text-emerald-700">{option}</span>
+                        <span className="text-zinc-900 font-medium group-hover:text-emerald-800">{option}</span>
                       </button>
                     ))}
                   </div>
@@ -250,21 +250,19 @@ export default function PracticeArea({ initialTopicId }: PracticeAreaProps) {
           </div>
         ) : (
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-10">
-            <div className="grid grid-cols-2 gap-6">
-              <div className="p-6 bg-emerald-50 border border-emerald-100 rounded-2xl text-center relative overflow-hidden shadow-sm">
-                <div className="absolute top-0 left-0 w-1 h-full bg-emerald-600" />
-                <p className="text-[10px] text-zinc-400 uppercase font-black tracking-widest mb-2">PRECISION SCORE</p>
-                <p className="text-4xl font-mono font-black text-emerald-600 tracking-tighter">{feedback?.score} <span className="text-zinc-300 text-xl">/ {feedback?.totalMarks}</span></p>
-              </div>
-              <div className="p-6 bg-indigo-50 border border-indigo-100 rounded-2xl text-center relative overflow-hidden shadow-sm">
-                <div className="absolute top-0 left-0 w-1 h-full bg-indigo-600" />
-                <p className="text-[10px] text-zinc-400 uppercase font-black tracking-widest mb-2">IB TRANSITION</p>
-                <div className="flex items-center justify-center gap-2">
-                   <p className="text-4xl font-mono font-black text-indigo-600">0{feedback?.level}</p>
-                   <Sparkles className="w-5 h-5 text-indigo-600" />
-                </div>
-              </div>
-            </div>
+                    <div className="p-6 bg-emerald-50 border border-emerald-200 rounded-2xl text-center relative overflow-hidden shadow-sm">
+                      <div className="absolute top-0 left-0 w-1 h-full bg-emerald-700" />
+                      <p className="text-[10px] text-zinc-600 uppercase font-black tracking-widest mb-2">PRECISION SCORE</p>
+                      <p className="text-4xl font-mono font-black text-emerald-700 tracking-tighter">{feedback?.score} <span className="text-zinc-400 text-xl">/ {feedback?.totalMarks}</span></p>
+                    </div>
+                    <div className="p-6 bg-indigo-50 border border-indigo-200 rounded-2xl text-center relative overflow-hidden shadow-sm">
+                      <div className="absolute top-0 left-0 w-1 h-full bg-indigo-700" />
+                      <p className="text-[10px] text-zinc-600 uppercase font-black tracking-widest mb-2">IB TRANSITION</p>
+                      <div className="flex items-center justify-center gap-2">
+                         <p className="text-4xl font-mono font-black text-indigo-700">0{feedback?.level}</p>
+                         <Sparkles className="w-5 h-5 text-indigo-700" />
+                      </div>
+                    </div>
 
             <div className="space-y-6">
                <div className="p-6 bg-white border border-zinc-100 rounded-2xl space-y-4 shadow-sm border-l-4 border-l-emerald-500">
