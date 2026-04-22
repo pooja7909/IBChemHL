@@ -182,7 +182,7 @@ export default function TutorChat({ initialTopicId }: TutorChatProps) {
             <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center shrink-0">
               <Loader2 className="w-4 h-4 text-emerald-600 animate-spin" />
             </div>
-            <div className="p-3 bg-white border border-zinc-100 rounded-2xl rounded-tl-none italic text-zinc-400 text-xs shadow-sm">
+            <div className="p-3 bg-white border border-zinc-200 rounded-2xl rounded-tl-none italic text-zinc-600 text-xs shadow-sm font-medium">
               Synthesizing response...
             </div>
           </div>
@@ -197,7 +197,7 @@ export default function TutorChat({ initialTopicId }: TutorChatProps) {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder="Ask about entropy, bonding, or isotopes..."
-            className="w-full bg-zinc-50 border border-zinc-200 rounded-xl py-3 pl-4 pr-12 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all placeholder:text-zinc-400 text-zinc-800"
+            className="w-full bg-zinc-50 border border-zinc-300 rounded-xl py-3 pl-4 pr-12 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500/50 focus:border-emerald-500/50 transition-all placeholder:text-zinc-500 text-zinc-900 font-medium"
           />
           <button 
             onClick={handleSend}
@@ -207,7 +207,7 @@ export default function TutorChat({ initialTopicId }: TutorChatProps) {
             <Send className="w-4 h-4" />
           </button>
         </div>
-        <p className="text-[10px] text-zinc-400 mt-2 text-center uppercase tracking-widest font-medium">AtomicTutor AI v1.0 • Use with Data Booklet v2025</p>
+        <p className="text-[10px] text-zinc-600 mt-2 text-center uppercase tracking-widest font-bold">AtomicTutor AI v1.0 • Use with Data Booklet v2025</p>
       </div>
     </div>
   );
