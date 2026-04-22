@@ -48,9 +48,9 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
             <div className="p-2 bg-emerald-50 rounded-lg">
               <Zap className="w-5 h-5 text-emerald-600" />
             </div>
-            <span className="text-[10px] text-emerald-600 font-bold uppercase tracking-[0.2em]">Mastery Score</span>
+            <span className="text-[10px] text-emerald-700 font-bold uppercase tracking-[0.2em]">Mastery Score</span>
           </div>
-          <p className="text-3xl font-mono font-black tracking-tighter">{currentProgress}%</p>
+          <p className="text-3xl font-mono font-black tracking-tighter text-emerald-900">{currentProgress}%</p>
           <div className="mt-4 h-1.5 bg-emerald-100 rounded-full overflow-hidden">
             <motion.div 
               initial={{ width: 0 }}
@@ -98,7 +98,7 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
         {/* Interactive Roadmap */}
         <section className="space-y-4">
           <div className="flex items-center justify-between px-2">
-            <h3 className="text-xs font-black uppercase tracking-[0.3em] text-zinc-400 flex items-center gap-2">
+            <h3 className="text-[10px] text-zinc-600 font-black uppercase tracking-[0.3em] flex items-center gap-2">
               <ListTodo className="w-4 h-4" />
               Dynamic Study Roadmap
             </h3>
@@ -132,10 +132,10 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
                     isFinished ? "bg-white border-zinc-100 opacity-60" : "bg-white border-zinc-100 hover:border-zinc-300 hover:shadow-md"
                   )}>
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-bold text-sm text-zinc-800 uppercase tracking-wide">{phase.focus}</h4>
-                      <span className="text-[8px] font-black bg-zinc-50 text-zinc-400 border border-zinc-100 px-2 py-0.5 rounded uppercase font-mono">Week {phase.week}</span>
+                      <h4 className="font-bold text-sm text-zinc-900 uppercase tracking-wide">{phase.focus}</h4>
+                      <span className="text-[8px] font-black bg-zinc-100 text-zinc-600 border border-zinc-200 px-2 py-0.5 rounded uppercase font-mono">Week {phase.week}</span>
                     </div>
-                    <p className="text-xs text-zinc-500 leading-relaxed italic mb-4">{phase.objective}</p>
+                    <p className="text-xs text-zinc-600 leading-relaxed font-medium mb-4">{phase.objective}</p>
                     
                     <div className="flex items-center gap-2">
                       <button 
@@ -200,10 +200,10 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
                           {isCompleted ? <CheckCircle2 className="w-5 h-5" /> : topic.code.split(' ')[1]}
                         </button>
                         <div>
-                          <p className="text-xs font-bold text-zinc-700 uppercase tracking-tight">{topic.code}</p>
+                          <p className="text-xs font-black text-zinc-900 uppercase tracking-tight">{topic.code}</p>
                           <p className={cn(
-                            "text-[10px] mt-0.5 uppercase tracking-tighter font-bold",
-                            isCompleted ? "text-emerald-600" : "text-zinc-400"
+                            "text-[10px] mt-0.5 uppercase tracking-tighter font-black",
+                            isCompleted ? "text-emerald-700" : "text-zinc-600"
                           )}>
                             {isCompleted ? "Unit Mastered" : "Revision Required"}
                           </p>
