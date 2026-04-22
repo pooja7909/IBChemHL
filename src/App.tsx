@@ -86,7 +86,7 @@ export default function App() {
               <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0 font-bold text-xs ring-2 ring-indigo-100">PH</div>
               <div className="hidden md:block flex-1 min-w-0">
                 <p className="text-xs font-bold truncate text-zinc-800">Pooja A.</p>
-                <p className="text-[10px] text-zinc-400 truncate">Candidate #2025</p>
+                <p className="text-[10px] text-zinc-400 truncate">Student ID: #2025</p>
               </div>
            </div>
            <button className="w-full flex items-center gap-4 px-4 py-2 text-zinc-400 hover:text-red-500 transition-colors uppercase tracking-widest text-[10px] font-bold">
