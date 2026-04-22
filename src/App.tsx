@@ -85,8 +85,8 @@ export default function App() {
            <div className="flex items-center gap-3 p-3 bg-zinc-50 rounded-xl border border-zinc-100">
               <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0 font-bold text-xs ring-2 ring-indigo-100">PH</div>
               <div className="hidden md:block flex-1 min-w-0">
-                <p className="text-xs font-bold truncate text-zinc-800">Pooja A.</p>
-                <p className="text-[10px] text-zinc-400 truncate">Student ID: #2025</p>
+                <p className="text-xs font-bold truncate text-zinc-900">Pooja A.</p>
+                <p className="text-[10px] text-zinc-600 truncate">Student ID: #2025</p>
               </div>
            </div>
            <button className="w-full flex items-center gap-4 px-4 py-2 text-zinc-400 hover:text-red-500 transition-colors uppercase tracking-widest text-[10px] font-bold">
@@ -101,13 +101,13 @@ export default function App() {
         {/* Top Header */}
         <header className="h-16 border-b border-zinc-200 flex items-center justify-between px-8 bg-white/70 backdrop-blur-md sticky top-0 z-50">
            <div className="flex items-center gap-2">
-              <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-[0.2em]">Current Node:</span>
-              <span className="text-xs font-mono text-emerald-600 font-bold ">~/ROOT/HL_STUDY/STRUCTURE_REACTIVITY</span>
+              <span className="text-[10px] text-zinc-600 font-bold uppercase tracking-[0.2em]">Current Node:</span>
+              <span className="text-xs font-mono text-emerald-800 font-bold ">~/ROOT/HL_STUDY/STRUCTURE_REACTIVITY</span>
            </div>
            <div className="flex items-center gap-6">
               <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-zinc-50 border border-zinc-200 rounded-full">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-tighter text-zinc-400 uppercase tracking-tighter">Sync: 18:14:02 UTC</span>
+                <span className="text-[10px] font-mono text-zinc-600 uppercase tracking-tighter">Sync: 18:14:02 UTC</span>
               </div>
               <button className="relative p-2 text-zinc-400 hover:text-zinc-900 transition-colors">
                 <Bell className="w-5 h-5" />
