@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, User, Bot, Loader2, Sparkles } from 'lucide-react';
+import { Send, User, Bot, Loader2, Sparkles, Zap } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
@@ -8,6 +8,44 @@ import 'katex/dist/katex.min.css';
 import { askTutor } from '../services/geminiService';
 import { IB_CURRICULUM } from '../constants/curriculum';
 import { cn } from '../lib/utils';
+import mermaid from 'mermaid';
+
+// Initialize Mermaid for diagrams
+mermaid.initialize({
+  startOnLoad: true,
+  theme: 'base',
+  themeVariables: {
+    primaryColor: '#ecfdf5',
+    primaryTextColor: '#065f46',
+    primaryBorderColor: '#10b981',
+    lineColor: '#10b981',
+    secondaryColor: '#f0fdf4',
+    tertiaryColor: '#ffffff',
+  }
+});
+
+const MermaidDiagram = ({ chart }: { chart: string }) => {
+  const [svg, setSvg] = useState<string>('');
+  const id = useRef(`mermaid-${Math.random().toString(36).substr(2, 9)}`);
+
+  useEffect(() => {
+    const render = async () => {
+      try {
+        const { svg } = await mermaid.render(id.current, chart);
+        setSvg(svg);
+      } catch (err) {
+        console.error('Mermaid render error:', err);
+      }
+    };
+    render();
+  }, [chart]);
+
+  return (
+    <div className="my-4 bg-white p-4 rounded-xl border border-emerald-100 shadow-sm overflow-x-auto flex justify-center">
+      <div dangerouslySetInnerHTML={{ __html: svg }} />
+    </div>
+  );
+};
 
 interface TutorChatProps {
   initialTopicId?: string | null;
@@ -109,6 +147,22 @@ export default function TutorChat({ initialTopicId }: TutorChatProps) {
                 <ReactMarkdown 
                   remarkPlugins={[remarkGfm, remarkMath]} 
                   rehypePlugins={[rehypeKatex]}
+                  components={{
+                    code({ node, inline, className, children, ...props }: any) {
+                      const match = /language-(\w+)/.exec(className || '');
+                      const content = String(children).replace(/\n$/, '');
+                      
+                      if (!inline && match && match[1] === 'mermaid') {
+                        return <MermaidDiagram chart={content} />;
+                      }
+                      
+                      return (
+                        <code className={cn("bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded text-xs font-mono", inline ? "" : "block p-3 my-2")} {...props}>
+                          {children}
+                        </code>
+                      );
+                    }
+                  }}
                 >
                   {m.text}
                 </ReactMarkdown>
