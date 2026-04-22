@@ -52,9 +52,11 @@ export async function askTutor(message: string, history: { role: 'user' | 'model
   }
 }
 
-export async function generateQuestion(topicCode: string) {
-  const prompt = `Generate a unique, challenging IB Chemistry HL Paper 2 style exam question for: ${topicCode}. 
-  Ensure it is different from common textbook examples. Change chemical species, data values, or context each time.`;
+export async function generateQuestion(topicCode: string, style: 'Paper 1' | 'Paper 2' = 'Paper 2') {
+  const prompt = `Generate a unique, challenging IB Chemistry HL ${style} style exam question for: ${topicCode}. 
+  Ensure it follows the structure and language of official IB past papers. Change chemical species, data values, or context each time.
+  If Paper 1: Provide 4 options A-D.
+  If Paper 2: Provide a detailed multi-part question context.`;
 
   try {
     const ai = getAI();
@@ -70,7 +72,9 @@ export async function generateQuestion(topicCode: string) {
             topic: { type: Type.STRING },
             question: { type: Type.STRING },
             marks: { type: Type.NUMBER },
-            difficulty: { type: Type.STRING }
+            difficulty: { type: Type.STRING },
+            options: { type: Type.ARRAY, items: { type: Type.STRING }, description: "Only for Paper 1" },
+            correctOption: { type: Type.STRING, description: "Only for Paper 1" }
           },
           required: ["topic", "question", "marks", "difficulty"]
         }
@@ -83,10 +87,23 @@ export async function generateQuestion(topicCode: string) {
   }
 }
 
+export async function generateSimilarQuestion(previousQuestion: string, topic: string) {
+  const prompt = `The student just answered this question: "${previousQuestion}".
+  Generate a SIMILAR but slightly different question on the SAME topic (${topic}) to reinforce the concept. 
+  Focus on the same underlying principle but use different numbers, chemicals, or experimental setup.`;
+
+  return generateQuestion(topic);
+}
+
 export async function markAnswer(question: string, studentAnswer: string) {
   const prompt = `Evaluate this student's answer for an IB Chemistry HL question. 
 Question: "${question}"
-Student's Answer: "${studentAnswer}"`;
+Student's Answer: "${studentAnswer}"
+
+If the answer is wrong or incomplete:
+1. Provide a CLEAR, DETAILED remediation explanation.
+2. Explain the "Why" (electrostatic forces, periodicity, etc.).
+3. Use bullet points for steps.`;
 
   try {
     const ai = getAI();
@@ -102,10 +119,11 @@ Student's Answer: "${studentAnswer}"`;
             score: { type: Type.NUMBER },
             totalMarks: { type: Type.NUMBER },
             feedback: { type: Type.STRING },
+            remediation: { type: Type.STRING, description: "Detailed explanation for mistakes" },
             correctAnswer: { type: Type.STRING },
             level: { type: Type.NUMBER }
           },
-          required: ["score", "totalMarks", "feedback", "correctAnswer", "level"]
+          required: ["score", "totalMarks", "feedback", "correctAnswer", "level", "remediation"]
         }
       },
     });
