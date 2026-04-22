@@ -8,41 +8,43 @@ import 'katex/dist/katex.min.css';
 import { askTutor } from '../services/geminiService';
 import { IB_CURRICULUM } from '../constants/curriculum';
 import { cn } from '../lib/utils';
-import mermaid from 'mermaid';
-
-// Initialize Mermaid for diagrams
-mermaid.initialize({
-  startOnLoad: true,
-  theme: 'base',
-  themeVariables: {
-    primaryColor: '#ecfdf5',
-    primaryTextColor: '#065f46',
-    primaryBorderColor: '#10b981',
-    lineColor: '#10b981',
-    secondaryColor: '#f0fdf4',
-    tertiaryColor: '#ffffff',
-  }
-});
 
 const MermaidDiagram = ({ chart }: { chart: string }) => {
   const [svg, setSvg] = useState<string>('');
   const id = useRef(`mermaid-${Math.random().toString(36).substr(2, 9)}`);
+  const mermaidRef = useRef<any>(null);
 
   useEffect(() => {
-    const render = async () => {
+    const initAndRender = async () => {
       try {
-        const { svg } = await mermaid.render(id.current, chart);
+        if (!mermaidRef.current) {
+          const m = (await import('mermaid')).default;
+          m.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+              primaryColor: '#ecfdf5',
+              primaryTextColor: '#065f46',
+              primaryBorderColor: '#10b981',
+              lineColor: '#10b981',
+              secondaryColor: '#f0fdf4',
+              tertiaryColor: '#ffffff',
+            }
+          });
+          mermaidRef.current = m;
+        }
+        const { svg } = await mermaidRef.current.render(id.current, chart);
         setSvg(svg);
       } catch (err) {
         console.error('Mermaid render error:', err);
       }
     };
-    render();
+    initAndRender();
   }, [chart]);
 
   return (
     <div className="my-4 bg-white p-4 rounded-xl border border-emerald-100 shadow-sm overflow-x-auto flex justify-center">
-      <div dangerouslySetInnerHTML={{ __html: svg }} />
+      {svg ? <div dangerouslySetInnerHTML={{ __html: svg }} /> : <Loader2 className="w-4 h-4 text-emerald-600 animate-spin" />}
     </div>
   );
 };
