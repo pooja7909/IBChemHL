@@ -53,7 +53,7 @@ interface TutorChatProps {
 
 export default function TutorChat({ initialTopicId }: TutorChatProps) {
   const [messages, setMessages] = useState<{ role: 'user' | 'model', text: string }[]>([
-    { role: 'model', text: "Welcome back, Candidate. I'm AtomicTutor. My goal is to ensure you secure a Grade 7 this May by mastering both the syllabus and perfect exam technique. \n\nWhat topic shall we tackle first? \n- **Structure 2.2** (VSEPR Shapes & Hybridization) \n- **Reactivity 1.4** (Entropy & Spontaneity) \n- Or any other concept from Structure 1-3 or Reactivity 1-3." }
+    { role: 'model', text: "Welcome back! I'm AtomicTutor. My goal is to help you master the IB Chemistry syllabus and perfect your exam technique. \n\nWhat topic shall we tackle first? \n- **Structure 2.2** (VSEPR Shapes & Hybridization) \n- **Reactivity 1.4** (Entropy & Spontaneity) \n- Or any other concept from Structure 1-3 or Reactivity 1-3." }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
