@@ -71,10 +71,10 @@ export default function Dashboard({ onNavigate }: DashboardProps) {
             <div className="p-2 bg-indigo-50 rounded-lg">
               <Target className="w-5 h-5 text-indigo-600" />
             </div>
-            <span className="text-[10px] text-indigo-600 font-bold uppercase tracking-[0.2em]">Target Grade</span>
+            <span className="text-[10px] text-indigo-600 font-bold uppercase tracking-[0.2em]">Target Mastery</span>
           </div>
-          <p className="text-3xl font-mono font-black tracking-tighter">LEVEL 07</p>
-          <p className="text-xs text-zinc-400 mt-1 font-mono uppercase italic">IB Chemistry HL Candidate</p>
+          <p className="text-3xl font-mono font-black tracking-tighter">EXPERT</p>
+          <p className="text-xs text-zinc-400 mt-1 font-mono uppercase italic">IB Chemistry HL Student</p>
         </motion.div>
 
         <motion.div 
