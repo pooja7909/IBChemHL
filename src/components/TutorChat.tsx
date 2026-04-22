@@ -17,10 +17,15 @@ const MermaidDiagram = ({ chart }: { chart: string }) => {
   useEffect(() => {
     const initAndRender = async () => {
       try {
+        const m = (window as any).mermaid;
+        if (!m) {
+          console.warn('Mermaid not yet loaded from CDN');
+          return;
+        }
+
         if (!mermaidRef.current) {
-          const m = (await import('mermaid')).default;
           m.initialize({
-            startOnLoad: true,
+            startOnLoad: false,
             theme: 'base',
             themeVariables: {
               primaryColor: '#ecfdf5',
